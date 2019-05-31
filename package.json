@@ -12,6 +12,5 @@
     "math.gl": "^2.3.1",
     "micro-memoize": "^4.0.4"
   },
-  "devDependencies": {
-  }
+  "devDependencies": {}
 }

@@ -23,17 +23,9 @@ class GameplayCamera extends Camera {
     return natives.getGameplayCamNearDof();
   }
 
-  get matrix() {
-
-    this.copy.position = this.position;
-    this.copy.rotation = this.rotation;
-
-    return this.copy.matrix;
-  }
-
   get position() {
     const position = natives.getGameplayCamCoord();
-    return new Vector3(position[0], position[1], position[2]);
+    return new Vector3(position.x, position.y, position.z);
   }
 
   get rendering() {
@@ -42,20 +34,11 @@ class GameplayCamera extends Camera {
 
   get rotation() {
     const rotation = natives.getGameplayCamRot();
-    return new Vector3(rotation[0], rotation[1], rotation[2]);
+    return new Vector3(rotation.x, rotation.y, rotation.z);
   }
 
   constructor() {
     super(0);
-  }
-
-  init() {
-
-    if(this.copy == undefined) {
-      this.copy     = Camera.create();
-      this.copy.fov = this.fov;
-    }
-
   }
 
 }

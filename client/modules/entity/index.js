@@ -1,3 +1,4 @@
+import alt from 'alt';
 import natives from 'natives';
 
 import EventEmitter from 'events';
@@ -36,7 +37,7 @@ class Entity extends EventEmitter {
   }
 
   get forwardVector() {
-    return new Vector3(this.matrix.m21, this.matrix.m23, this.matrix.m22);
+    return new Vector3(this.matrix.m11, this.matrix.m13, this.matrix.m12);
   }
 
   get heading() {
@@ -84,9 +85,8 @@ class Entity extends EventEmitter {
 
   set matrix(val) {
 
-    const q = val.quaternion();
-
-    this.position   = {x: val.m41, y: val.m42, z: val.m43};
+    const q         = val.quaternion();
+    this.position   = {x: val.m30, y: val.m31, z: val.m32};
     this.quaternion = {x: q.x, y: q.y, z: q.z, w: q.w};
   }
 
@@ -121,12 +121,12 @@ class Entity extends EventEmitter {
   }
 
   get rightVector() {
-    return new Vector3(this.matrix.m11, this.matrix.m13, this.matrix.m12);
+    return new Vector3(this.matrix.m01, this.matrix.m03, this.matrix.m02);
   }
 
   get rotation() {
-    const p = natives.getEntityRotation(this.handle);
-    return new Vector3(p[0], p[1], p[2]);
+    const r = natives.getEntityRotation(this.handle);
+    return new Vector3(p.x, p.y, p.z);
   }
 
   set rotation(val) {
@@ -158,7 +158,7 @@ class Entity extends EventEmitter {
   }
 
   get upVector() {
-    return new Vector3(this.matrix.m31, this.matrix.m33, this.matrix.m32);
+    return new Vector3(this.matrix.m20, this.matrix.m22, this.matrix.m21);
   }
 
   constructor(handle) {

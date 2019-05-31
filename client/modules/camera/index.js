@@ -1,3 +1,4 @@
+import alt from 'alt'
 import natives from 'natives'
 
 import utils from '../../../common/modules/utils/index';
@@ -27,7 +28,7 @@ class Camera {
 
   get position() {
     const position = natives.getCamCoord(this.handle);
-    return new Vector3(position[0], position[1], position[2]);
+    return new Vector3(position.x, position.y, position.z);
   }
 
   set position(val) {
@@ -59,29 +60,24 @@ class Camera {
   }
 
   get forwardVector() {
-    return new Vector3(this.matrix.m21, this.matrix.m23, this.matrix.m22);
+    return new Vector3(this.matrix.m11, this.matrix.m13, this.matrix.m12);
   }
 
   get matrix() {
 
-    const m = natives.getCamMatrix(this.handle);
-
-    const values = [
-      m[0][0], m[0][1], m[0][2], 0,
-      m[1][0], m[1][1], m[1][2], 0,
-      m[2][0], m[2][1], m[2][2], 0,
-      m[3][0], m[3][1], m[3][2], 1
-    ];
+    const pos  = this.position;
+    const quat = this.rotation.quaternion();
 
     const matrix = new Matrix4();
 
-    matrix.set(values);
+    matrix.fromQuaternion(quat);
+    matrix.translate(pos);
 
     return matrix;
   }
 
   set matrix(val) {
-    this.position = {x: val.m41, y: val.m42, z: val.m43};
+    this.position = {x: val.m30, y: val.m31, z: val.m32};
     this.rotation = val.quaternion().euler();
   }
 
@@ -98,12 +94,12 @@ class Camera {
   }
 
   get rightVector() {
-    return new Vector3(this.matrix.m11, this.matrix.m13, this.matrix.m12);
+    return new Vector3(this.matrix.m01, this.matrix.m03, this.matrix.m02);
   }
 
   get rotation() {
     const rotation = natives.getCamRot(this.handle);
-    return new Vector3(rotation[0], rotation[1], rotation[2]);
+    return new Vector3(rotation.x, rotation.y, rotation.z);
   }
 
   set rotation(val) {
@@ -127,7 +123,7 @@ class Camera {
   }
 
   get upVector() {
-    return new Vector3(this.matrix.m31, this.matrix.m33, this.matrix.m32);
+    return new Vector3(this.matrix.m20, this.matrix.m22, this.matrix.m21);
   }
 
   static create(position = Vector3.zero, rotation = Vector3.zero, fov = 90, p8 = true, p9 = 2) {

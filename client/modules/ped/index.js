@@ -87,27 +87,7 @@ class Ped extends Entity {
   get maxHealth() {
     return this.getMaxHealth();
   }
-
-  set matrix(val) {
-    super.matrix = val;
-  }
-
-  get matrix() {
-
-    const m = natives.getEntityMatrix(this.handle);
-
-    const matrix = new Matrix4();
-
-    matrix.set(
-      m[1][0], m[1][1], m[1][2], 0,
-      m[0][0], m[0][1], m[0][2], 0,
-      m[2][0], m[2][1], m[2][2], 0,
-      m[3][0], m[3][1], m[3][2], 1
-    );
-    
-    return matrix;
-  }
-
+  
   get direction() {
     const heading = (this.heading + 90) * Math.PI / 180;
     return new Vector3(Math.cos(heading), Math.sin(heading), 0);
