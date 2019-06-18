@@ -1,3 +1,5 @@
+import * as alt from 'alt';
+
 /* Common */
 import constants from '../common/modules/constants/index';
 import hashes from '../common/modules/hashes/index';
@@ -6,6 +8,7 @@ import math from '../common/modules/math/index';
 
 /* Client */
 import game from './modules/game/index';
+import helpers from './modules/helpers/index';
 import tasks from './modules/tasks/index';
 
 import Camera from './modules/camera/index';
@@ -23,6 +26,7 @@ export default {
   math,
 
   game,
+  helpers,
   tasks,
 
   types: {
@@ -32,7 +36,7 @@ export default {
     Ped,
     PedComponentCollection,
     Player,
+    Vehicle: alt.Vehicle
   },
 
 }
-

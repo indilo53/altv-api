@@ -39,6 +39,17 @@ class PedComponentCollection  {
     return natives.getNumberOfPedTextureVariations(this.ped.handle, component, drawable);
   }
 
+  *data() {
+
+    for(let k in PED_COMPONENTS) {
+      if(PED_COMPONENTS.hasOwnProperty(k) && k !== 'INVALID' && k !== 'MAX') {
+        const component = PED_COMPONENTS[k];
+        yield this[component];
+      }
+    }
+
+  }
+
   setDefault() {
     natives.setPedDefaultComponentVariation(this.ped.handle);
   }

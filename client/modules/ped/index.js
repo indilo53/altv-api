@@ -1,4 +1,7 @@
-import natives from 'natives'
+console.log('foo');
+
+import * as alt from 'alt';
+import * as natives from 'natives';
 
 import constants               from '../../../common/modules/constants/index';
 import hashes                  from '../../../common/modules/hashes/index';
@@ -9,6 +12,8 @@ import Model                   from '../model/index';
 import PedComponentCollection  from '../pedcomponentcollection/index';
 import tasks                   from '../tasks/index';
 
+const RAD2DEG = 180 / Math.PI;
+const DEG2RAD = Math.PI / 180;
 
 const { CTASKS, RAGODLL_TYPES } = constants;
 const { TASKS }                 = hashes;
@@ -61,6 +66,15 @@ class Ped extends Entity {
     natives.setPedArmour(this.handle, armour);
   }
 
+  get components() {
+    return this._components;
+  }
+
+  set components(val) {
+    this._components = val;
+    this._components.set(this._components.get());
+  }
+
   get cTasks() { // Lot of native calls ! Use it for debugging purposes
 
     const tasks = [];
@@ -89,8 +103,8 @@ class Ped extends Entity {
   }
   
   get direction() {
-    const heading = (this.heading + 90) * Math.PI / 180;
-    return new Vector3(Math.cos(heading), Math.sin(heading), 0);
+    const heading = (this.heading + 90) * DEG2RAD;
+    return new Vector3(Math.cos(heading), Math.sin(heading), Math.tanh(this.quaternion.euler().z * DEG2RAD));
   }
 
   get maxHealth() {
@@ -147,7 +161,7 @@ class Ped extends Entity {
 
     super(handle);
 
-    this.components = new PedComponentCollection(this);
+    this._components = new PedComponentCollection(this);
 
   }
 

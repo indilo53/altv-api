@@ -1,5 +1,7 @@
-import alt from 'alt'
-import natives from 'natives';
+console.log("foo");
+
+import * as alt from 'alt'
+import * as natives from 'natives';
 import EventEmitter from 'events';
 
 import utils from '../../../common/modules/utils/index';
@@ -7,62 +9,47 @@ import game  from '../game/index';
 import Ped   from '../ped/index';
 import Model from '../model/index';
 
-class Player extends EventEmitter {
+const PlayerProto = alt.Player.prototype;
+const Player      = PlayerProto.constructor;
 
-  get exists() {
-    return this.ped.exists;
+Object.defineProperty(PlayerProto, 'sid', {
+  get: function() { return -1; }
+});
+
+Object.defineProperty(PlayerProto, 'exists', {
+  get: function() { return this.ped.exists; }
+});
+
+Object.defineProperty(PlayerProto, 'idle', {
+  get: function() { return this.ped.isTaskActive(CTASKS.CTaskPlayerIdles); }
+});
+
+Object.defineProperty(PlayerProto, 'maxArmour', {
+  get: function() { return natives.getPlayerMaxArmour(this.scriptID); },
+  set: function(val) { natives.setPlayerMaxArmour(this.scriptID, val); }
+});
+
+Object.defineProperty(PlayerProto, 'model', {
+  get: function() { return this.ped.model; },
+  set: function(val) { natives.setPlayerModel(this.scriptID, +val); }
+});
+
+Object.defineProperty(PlayerProto, 'onFoot', {
+  get: function() { return this.ped.isCTaskActive(CTASKS.CTaskPlayerOnFoot); }
+});
+
+Object.defineProperty(PlayerProto, 'owned', {
+  get: function() {
+    return this == alt.getLocalPlayer();
   }
+});
 
-  get idle() {
-    return this.ped.isTaskActive(CTASKS.CTaskPlayerIdles);
-  }
+Object.defineProperty(PlayerProto, 'ped', {
+  get: function() { return new Ped(this.scriptID); }
+});
 
-  get maxArmour() {
-    return natives.getPlayerMaxArmour(this.id);
-  }
-
-  set maxArmour(val) {
-    natives.setPlayerMaxArmour(this.id, val);
-  }
-
-  set model(val) {
-    natives.setPlayerModel(this.id, +val);
-  }
-
-  get model() {
-    return this.ped.model;
-  }
-
-  get name() {
-    return natives.getPlayerName(this.id);
-  }
-
-  get onFoot() {
-    return this.ped.isCTaskActive(CTASKS.CTaskPlayerOnFoot);
-  }
-
-  get owned() {
-    const localPlayer = alt.getLocalPlayer();
-    return localPlayer !== null && this.id === localPlayer.id;
-  }
-
-  get ped() {
-    const player = alt.players.find(e => e.id === this.id);
-    return new Ped(player.scriptID);
-  }
-
-  constructor(id) {
-
-    super();
-
-    this.id  = id;
-    this.sid = -1;
-  }
-
-  valueOf() {
-    return this.id;
-  }
-
+PlayerProto.valueOf = function() {
+  return this.scriptID;
 }
 
 export default Player;

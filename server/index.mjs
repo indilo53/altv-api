@@ -3,5 +3,6 @@ import utils     from '../common/modules/utils/index';
 
 module.exports = {
   constants,
+  utils,
 }
 

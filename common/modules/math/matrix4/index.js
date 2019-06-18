@@ -1,4 +1,4 @@
-import alt from 'alt';
+import * as alt from 'alt';
 import { Matrix4 } from 'math.gl/dist/esm/index';
 import Quaternion  from '../quaternion/index';
 

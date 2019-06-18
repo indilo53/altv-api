@@ -2,8 +2,8 @@
 
 
 ```js
-import alt from 'alt'
-import natives from 'natives'
+import * as alt from 'alt'
+import * as natives from 'natives'
 
 import $ from './modules/altv-api/client/index.js';
 

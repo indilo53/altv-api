@@ -1,5 +1,5 @@
-import alt from 'alt';
-import natives from 'natives';
+import * as alt from 'alt';
+import * as natives from 'natives';
 
 import EventEmitter from 'events';
 import memoize      from 'micro-memoize';
@@ -37,7 +37,7 @@ class Entity extends EventEmitter {
   }
 
   get forwardVector() {
-    return new Vector3(this.matrix.m11, this.matrix.m13, this.matrix.m12);
+    return new Vector3(this.matrix.m10, this.matrix.m11, this.matrix.m12);
   }
 
   get heading() {
@@ -45,8 +45,7 @@ class Entity extends EventEmitter {
   }
 
   set heading(val) {
-    const heading = Math.floor(val);
-    game.setEntityHeading(this.handle, heading);
+    natives.setEntityHeading(this.handle, val);
   }
 
   get health() {
@@ -70,14 +69,13 @@ class Entity extends EventEmitter {
   get matrix() {
 
     const m = natives.getEntityMatrix(this.handle);
-
     const matrix = new Matrix4();
 
     matrix.set(
-      m[0][0], m[0][1], m[0][2], 0,
-      m[1][0], m[1][1], m[1][2], 0,
-      m[2][0], m[2][1], m[2][2], 0,
-      m[3][0], m[3][1], m[3][2], 1
+      m[1].x, m[1].y, m[1].z, 0,
+      m[2].x, m[2].y, m[2].z, 0,
+      m[3].x, m[3].y, m[3].z, 0,
+      m[4].x, m[4].y, m[4].z, 1
     );
 
     return matrix;
@@ -121,12 +119,12 @@ class Entity extends EventEmitter {
   }
 
   get rightVector() {
-    return new Vector3(this.matrix.m01, this.matrix.m03, this.matrix.m02);
+    return new Vector3(this.matrix.m00, this.matrix.m01, this.matrix.m02);
   }
 
   get rotation() {
     const r = natives.getEntityRotation(this.handle);
-    return new Vector3(p.x, p.y, p.z);
+    return new Vector3(r.x, r.y, r.z);
   }
 
   set rotation(val) {
@@ -158,7 +156,7 @@ class Entity extends EventEmitter {
   }
 
   get upVector() {
-    return new Vector3(this.matrix.m20, this.matrix.m22, this.matrix.m21);
+    return new Vector3(this.matrix.m20, this.matrix.m21, this.matrix.m22);
   }
 
   constructor(handle) {
@@ -217,7 +215,7 @@ class Entity extends EventEmitter {
   async teleport(position) {
 
     this.position = position;
-    this.freeze();
+    this.freeze(true);
 
     await this.requestCollision(position);
 

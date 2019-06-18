@@ -1,4 +1,4 @@
-import natives from 'natives'
+import * as natives from 'natives'
 
 import math from '../../../common/modules/math/index';
 import Camera from '../camera/index';
@@ -6,6 +6,10 @@ import Camera from '../camera/index';
 const { Vector3, Matrix4 } = math;
 
 class GameplayCamera extends Camera {
+
+  get active() {
+    return this.rendering;
+  }
 
   get farClip() {
     return natives.getGameplayCamFarClip();
@@ -35,6 +39,10 @@ class GameplayCamera extends Camera {
   get rotation() {
     const rotation = natives.getGameplayCamRot();
     return new Vector3(rotation.x, rotation.y, rotation.z);
+  }
+
+  render(render = true, easeTime = 0, p3 = true, p4 = true) {
+    return this.constructor.renderScripted(!render, easeTime, p3, p4);
   }
 
   constructor() {

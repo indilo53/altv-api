@@ -1,4 +1,4 @@
-import alt from 'alt';
+import * as alt from 'alt';
 
 const Utils = {}
 
@@ -6,6 +6,14 @@ Utils.delay = function(timeout) {
 
   return new Promise((resolve, reject) => {
     alt.setTimeout(resolve, timeout);
+  });
+
+}
+
+Utils.nextTick = function() {
+  
+  return new Promise((resolve, reject) => {
+    alt.nextTick(resolve);
   });
 
 }

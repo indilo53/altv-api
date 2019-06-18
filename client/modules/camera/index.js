@@ -1,5 +1,5 @@
-import alt from 'alt'
-import natives from 'natives'
+import * as alt from 'alt'
+import * as natives from 'natives'
 
 import utils from '../../../common/modules/utils/index';
 import math from '../../../common/modules/math/index';
@@ -35,6 +35,14 @@ class Camera {
     natives.setCamCoord(this.handle, val.x, val.y, val.z);
   }
 
+  get quaternion() {
+    return this.rotation.quaternion();
+  }
+
+  set quaternion(val) {
+    this.rotation = val.euler();
+  }
+
   get farClip() {
     return natives.getCamFarClip(this.handle);
   }
@@ -56,11 +64,11 @@ class Camera {
   }
 
   set fov(val) {
-    natives.getCamFov(this.handle, val);
+    natives.setCamFov(this.handle, val);
   }
 
   get forwardVector() {
-    return new Vector3(this.matrix.m11, this.matrix.m13, this.matrix.m12);
+    return new Vector3(this.matrix.m10, this.matrix.m11, this.matrix.m12);
   }
 
   get matrix() {
@@ -94,7 +102,7 @@ class Camera {
   }
 
   get rightVector() {
-    return new Vector3(this.matrix.m01, this.matrix.m03, this.matrix.m02);
+    return new Vector3(this.matrix.m00, this.matrix.m01, this.matrix.m02);
   }
 
   get rotation() {
@@ -123,10 +131,10 @@ class Camera {
   }
 
   get upVector() {
-    return new Vector3(this.matrix.m20, this.matrix.m22, this.matrix.m21);
+    return new Vector3(this.matrix.m20, this.matrix.m21, this.matrix.m22);
   }
 
-  static create(position = Vector3.zero, rotation = Vector3.zero, fov = 90, p8 = true, p9 = 2) {
+  static create(position = Vector3.zero, rotation = Vector3.zero, fov = 50, p8 = true, p9 = 2) {
     const handle = natives.createCamWithParams('DEFAULT_SCRIPTED_CAMERA', position.x, position.y, position.z, rotation.x, rotation.y, rotation.z, fov, p8, p9);
     return new (this)(handle);
   }
@@ -145,6 +153,18 @@ class Camera {
 
   constructor(handle) {
     this.handle = handle;
+  }
+
+  attachToEntity(entity, offset = Vector3.zero, relative = true) {
+    natives.attachCamToEntity(this.handle, +entity, offset.x, offset.y, offset.z, relative);
+  }
+
+  detach() {
+    natives.detachCam(this.handle);
+  }
+
+  destroy() {
+    natives.destroyCam(this.handle, false);
   }
 
   point(target, offset = Vector3.zero) {

@@ -1,4 +1,4 @@
-import natives from 'natives'
+import * as natives from 'natives'
 import utils from '../../../common/modules/utils/index.js'
 
 class Model {
