@@ -5,7 +5,7 @@
 import * as alt from 'alt'
 import * as natives from 'natives'
 
-import $ from './modules/altv-api/client/index.js';
+import $ from './modules/altv-api/client/index';
 
 const { CTASKS, PED_COMPONENTS }                     = $.constants;
 const { PED_MODELS, TASKS }                          = $.hashes;

@@ -18,6 +18,40 @@ import Ped from './modules/ped/index';
 import PedComponentCollection from './modules/pedcomponentcollection/index'
 import Player from './modules/player/index';
 
+const callbacks  = {};
+let   callbackId = 0;
+
+alt.onServer('altv-api:response', (id, ...args) => {
+
+  if(callbacks[id] === undefined) {
+
+    alt.logError('')
+
+  } else {
+
+    callbacks[id](...args);
+    delete callbacks[id];
+  
+  }
+
+});
+
+function request(name, cb, ...args) {
+
+  const id      = (callbackId + 1 < 1000000) ? callbackId + 1 : 0;
+  callbacks[id] = cb;
+
+  alt.emitServer('altv-api:request', name, id, ...args);
+
+  callbackId = id;
+}
+
+function requestp(name, ...args) {
+  return new Promise((resolve, reject) => {
+    request(name, resolve, ...args);
+  });
+}
+
 export default {
 
   constants,
@@ -39,4 +73,6 @@ export default {
     Vehicle: alt.Vehicle
   },
 
+  request,
+  requestp,
 }

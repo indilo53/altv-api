@@ -1,5 +1,5 @@
 import * as natives from 'natives'
-import utils from '../../../common/modules/utils/index.js'
+import utils from '../../../common/modules/utils/index'
 
 class Model {
 
@@ -8,7 +8,7 @@ class Model {
   }
 
   constructor(hashOrName) {
-    this.hash = (typeof hashOrName === 'number') ? utils.toSigned(hashOrName) : utils.joaat(hashOrName);
+    this.hash = (typeof hashOrName === 'number') ? utils.toUnsigned(hashOrName) : utils.joaat(hashOrName);
   }
 
   request(cache = false, timeout = 5000) {

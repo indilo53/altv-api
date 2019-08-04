@@ -163,4 +163,44 @@ Utils.waitFor = function(check, timeout = -1, delay = 100) {
 
 }
 
+// <-- withCache
+const cachedClasses = new Map();
+
+Utils.withCache = function(cls, isEqual, exists) {
+  
+  const ext = Utils.nameClass(cls.prototype.constructor.name + 'WithCache', class extends cls {
+
+    get __exists() { return exists(this); }
+
+    constructor(...args) {
+
+      for(const _cls in cachedClasses[ext])
+        if(isEqual(args, cachedClasses[ext][_cls]))
+          return cachedClasses[ext][_cls];
+
+      super(...args);
+
+      cachedClasses[ext][this] = this;
+    }
+
+  });
+
+  cachedClasses[ext] = new Map();
+
+  return ext;
+
+}
+
+const si = alt.setInterval || setInterval;
+
+si(() => {
+
+  for(const ext in cachedClasses)
+    for(const cls in cachedClasses[ext])
+      if(!cachedClasses[ext][cls].__exists)
+        delete cachedClasses[ext][cls];
+
+}, 60000);
+// withCache -->
+
 export default Utils;

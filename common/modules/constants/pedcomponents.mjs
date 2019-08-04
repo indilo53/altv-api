@@ -1,7 +1,7 @@
 export default {
   INVALID : -1, // Invalid
   HEAD    : 0,  // Head
-  BERD    : 1,  // Beard
+  BERD    : 1,  // Mask
   HAIR    : 2,  // Hair
   UPPR    : 3,  // Arms
   LOWR    : 4,  // Pants

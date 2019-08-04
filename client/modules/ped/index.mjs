@@ -1,16 +1,18 @@
-console.log('foo');
-
 import * as alt from 'alt';
 import * as natives from 'natives';
 
-import constants               from '../../../common/modules/constants/index';
-import hashes                  from '../../../common/modules/hashes/index';
-import utils                   from '../../../common/modules/utils/index';
-import math                    from '../../../common/modules/math/index';
-import Entity                  from '../entity/index';
-import Model                   from '../model/index';
-import PedComponentCollection  from '../pedcomponentcollection/index';
-import tasks                   from '../tasks/index';
+import constants                from '../../../common/modules/constants/index';
+import hashes                   from '../../../common/modules/hashes/index';
+import utils                    from '../../../common/modules/utils/index';
+import math                     from '../../../common/modules/math/index';
+import Entity                   from '../entity/index';
+import Model                    from '../model/index';
+import PedHeadBlendData         from '../pedheadblenddata/index';
+import PedFaceFeatureCollection from '../pedfacefeaturecollection/index';
+import PedComponentCollection   from '../pedcomponentcollection/index';
+import PedOverlayCollection     from '../pedoverlaycollection/index';
+import PedPropCollection        from '../pedpropcollection/index';
+import tasks                    from '../tasks/index';
 
 const RAD2DEG = 180 / Math.PI;
 const DEG2RAD = Math.PI / 180;
@@ -98,6 +100,10 @@ class Ped extends Entity {
     return names;
   }
 
+  get headBlendData() {
+    return this._headBlendData;
+  }
+
   get maxHealth() {
     return this.getMaxHealth();
   }
@@ -107,6 +113,15 @@ class Ped extends Entity {
     return new Vector3(Math.cos(heading), Math.sin(heading), Math.tanh(this.quaternion.euler().z * DEG2RAD));
   }
 
+  get faceFeatures() {
+    return this._faceFeatures;
+  }
+
+  set faceFeatures(val) {
+    this._faceFeatures = val;
+    this._faceFeatures.set(this._faceFeatures.get());
+  }
+
   get maxHealth() {
     return natives.getPedMaxHealth(this.handle);
   }
@@ -114,6 +129,24 @@ class Ped extends Entity {
   set maxHealth(val) {
     const health = Math.floor(val);
     natives.setPedMaxHealth(this.handle, health);
+  }
+
+  get overlays() {
+    return this._overlays;
+  }
+
+  set overlays(val) {
+    this._overlays = val;
+    this._overlays.set(this._overlays.get());
+  }
+
+  get props() {
+    return this._props;
+  }
+
+  set props(val) {
+    this.props = val;
+    this._props.set(this._props.get());
   }
 
   get taskStatus() { // Lot of native calls ! Use it for debugging purposes
@@ -161,7 +194,11 @@ class Ped extends Entity {
 
     super(handle);
 
-    this._components = new PedComponentCollection(this);
+    this._headBlendData = new PedHeadBlendData(this);
+    this._faceFeatures  = new PedFaceFeatureCollection(this);
+    this._components    = new PedComponentCollection(this);
+    this._overlays      = new PedOverlayCollection(this);
+    this._props         = new PedPropCollection(this);
 
   }
 
@@ -175,7 +212,7 @@ class Ped extends Entity {
 
   clone(heading = 0.0, network = true) {
     const handle = natives.clonePed(this.handle, heading, network, false);
-    return new Ped(handle);
+    return new (this)(handle);
   }
 
   hasWeapon(hash) {
@@ -224,4 +261,4 @@ for(let k in tasks) {
   }
 }
 
-export default Ped;
+export default utils.withCache(Ped, (args, curr) => args[0] === curr.handle, self => self.exists);

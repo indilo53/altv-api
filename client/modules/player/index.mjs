@@ -1,5 +1,3 @@
-console.log("foo");
-
 import * as alt from 'alt'
 import * as natives from 'natives';
 import EventEmitter from 'events';
@@ -31,7 +29,10 @@ Object.defineProperty(PlayerProto, 'maxArmour', {
 
 Object.defineProperty(PlayerProto, 'model', {
   get: function() { return this.ped.model; },
-  set: function(val) { natives.setPlayerModel(this.scriptID, +val); }
+  set: function(val) {
+    natives.setPlayerModel(this.scriptID, +val);
+    natives.setPedHeadBlendData(this.ped.handle, 0, 21, 0, 0, 0, 0, 0.0, 0.0, 0.0, true);
+  }
 });
 
 Object.defineProperty(PlayerProto, 'onFoot', {
@@ -40,7 +41,7 @@ Object.defineProperty(PlayerProto, 'onFoot', {
 
 Object.defineProperty(PlayerProto, 'owned', {
   get: function() {
-    return this == alt.getLocalPlayer();
+    return this == alt.Player.local;
   }
 });
 

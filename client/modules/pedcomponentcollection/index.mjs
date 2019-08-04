@@ -54,10 +54,14 @@ for(let k in PED_COMPONENTS) {
 
       get: function() {
 
+        const drawable = natives.getPedDrawableVariation(this.ped.handle, component);
+
         return {
-          drawable: natives.getPedDrawableVariation(this.ped.handle, component),
-          texture : natives.getPedTextureVariation (this.ped.handle, component),
-          palette : natives.getPedPaletteVariation (this.ped.handle, component),
+          drawable     : drawable,
+          drawableCount: this.ped.components.drawableCount(component),
+          texture      : natives.getPedTextureVariation (this.ped.handle, component),
+          textureCount : this.ped.components.textureCount(component, drawable),
+          palette      : natives.getPedPaletteVariation (this.ped.handle, component),
         }
 
       },

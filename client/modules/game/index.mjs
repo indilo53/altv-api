@@ -17,7 +17,7 @@ class Game extends EventEmitter {
   }
 
   get player() {
-    return alt.getLocalPlayer();
+    return alt.Player.local;
   }
 
   get players() {
@@ -38,7 +38,7 @@ class Game extends EventEmitter {
 
     alt.on('connectionComplete', async () => {
       
-      await utils.waitFor(() => alt.getLocalPlayer() !== null);
+      await utils.waitFor(() => alt.Player.local !== null);
 
       this._camera = new GameplayCamera();
 
