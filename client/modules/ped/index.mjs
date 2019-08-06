@@ -104,6 +104,11 @@ class Ped extends Entity {
     return this._headBlendData;
   }
 
+  set headBlendData(val) {
+    this._headBlendData = val;
+    this._headBlendData.set(this._headBlendData.get());
+  }
+
   get maxHealth() {
     return this.getMaxHealth();
   }

@@ -233,4 +233,4 @@ Entity.prototype.requestCollision = utils.promisify(
   function(position) { return this.collisionLoaded }
 );
 
-export default utils.withCache(Entity, (args, curr) => args[0] === curr.handle, self => self.exists);;
+export default Entity;
