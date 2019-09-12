@@ -36,7 +36,7 @@ class PedHeadBlendData  {
     this._skinMix     = 0.0;
     this._thirdMix    = 0.0;
 
-    this.set(data);  
+    this.set(data);
   }
 
   get() {

@@ -38,7 +38,7 @@ class Game extends EventEmitter {
 
     alt.on('connectionComplete', async () => {
       
-      await utils.waitFor(() => alt.Player.local !== null);
+      await utils.waitFor(() => alt.Player.local !== null && alt.Player.local.scriptID !== null && alt.Player.local.scriptID > 0);
 
       this._camera = new GameplayCamera();
 
@@ -46,7 +46,7 @@ class Game extends EventEmitter {
 
     });
 
-    alt.setInterval(() => this.emit('tick'), 0);
+    alt.everyTick(() => this.emit('tick'));
 
     this.on('tick', () => this.processControls());
   }
@@ -114,14 +114,12 @@ class Game extends EventEmitter {
 
       const lastEnabled = this.mouseInputEnabled;
 
-      this.enableMouseInput(true);
-      alt.showCursor(true);
+      this.enableMouseInput(false);
 
       this.once('mousedown', (btn) => {
 
-        this.enableMouseInput(false);
+        this.enableMouseInput(lastEnabled);
 
-        alt.showCursor(false);
         const {x, y} = alt.getCursorPos();
         resolve({btn, x, y});
       });

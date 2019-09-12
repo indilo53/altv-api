@@ -1,11 +1,17 @@
 import * as alt from 'alt';
 
+const si = alt.setInterval   || setInterval;
+const ci = alt.clearInterval || clearInterval;
+const st = alt.setTimeout    || setTimeout;
+const ct = alt.clearTimeout  || clearTimeout;
+const nt = alt.nextTick      || process.nextTick;
+
 const Utils = {}
 
 Utils.delay = function(timeout) {
 
   return new Promise((resolve, reject) => {
-    alt.setTimeout(resolve, timeout);
+    st(resolve, timeout);
   });
 
 }
@@ -13,7 +19,7 @@ Utils.delay = function(timeout) {
 Utils.nextTick = function() {
   
   return new Promise((resolve, reject) => {
-    alt.nextTick(resolve);
+    nt(resolve);
   });
 
 }
@@ -111,10 +117,10 @@ Utils.promisify = function(start, ended, check = () => true, run = null, delay =
 
       start.apply(this, args);
 
-      const interval = alt.setInterval(() => {
+      const interval = si(() => {
 
         if(ended.apply(this, args)) {
-          alt.clearInterval(interval);
+          ci(interval);
           const success = check.apply(this, args);
           resolve(success);
           return;
@@ -134,11 +140,11 @@ Utils.promisify = function(start, ended, check = () => true, run = null, delay =
 Utils.toSigned = function(value, nbit = 32) {
   value = value << 32 - nbit;
   value = value >> 32 - nbit;
-  return value;
+  return Math.floor(value);
 }
 
 Utils.toUnsigned= function(value) {
-  return (value >>> 0);
+  return Math.floor(value >>> 0);
 }
 
 Utils.waitFor = function(check, timeout = -1, delay = 100) {
@@ -147,13 +153,13 @@ Utils.waitFor = function(check, timeout = -1, delay = 100) {
 
     const start = +new Date;
 
-    const interval = alt.setInterval(() => {
+    const interval = si(() => {
 
       const now     = +new Date;
       const success = check();
 
       if(success || (timeout !== -1 && (now - start >= timeout))) {
-        alt.clearInterval(interval);
+        ci(interval);
         resolve(success);
       }
 
@@ -190,8 +196,6 @@ Utils.withCache = function(cls, isEqual, exists) {
   return ext;
 
 }
-
-const si = alt.setInterval || setInterval;
 
 si(() => {
 

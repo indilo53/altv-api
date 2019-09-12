@@ -74,7 +74,7 @@ class Ped extends Entity {
 
   set components(val) {
     this._components = val;
-    this._components.set(this._components.get());
+    this._components.set(val);
   }
 
   get cTasks() { // Lot of native calls ! Use it for debugging purposes
@@ -106,7 +106,7 @@ class Ped extends Entity {
 
   set headBlendData(val) {
     this._headBlendData = val;
-    this._headBlendData.set(this._headBlendData.get());
+    this._headBlendData.set(val);
   }
 
   get maxHealth() {
@@ -124,7 +124,7 @@ class Ped extends Entity {
 
   set faceFeatures(val) {
     this._faceFeatures = val;
-    this._faceFeatures.set(this._faceFeatures.get());
+    this._faceFeatures.set(val);
   }
 
   get maxHealth() {
@@ -142,7 +142,7 @@ class Ped extends Entity {
 
   set overlays(val) {
     this._overlays = val;
-    this._overlays.set(this._overlays.get());
+    this._overlays.set(val);
   }
 
   get props() {
@@ -151,7 +151,7 @@ class Ped extends Entity {
 
   set props(val) {
     this.props = val;
-    this._props.set(this._props.get());
+    this._props.set(val);
   }
 
   get taskStatus() { // Lot of native calls ! Use it for debugging purposes
@@ -266,4 +266,4 @@ for(let k in tasks) {
   }
 }
 
-export default utils.withCache(Ped, (args, curr) => args[0] === curr.handle, self => self.exists);
+export default utils.withCache(Ped, (args, curr) => args[0] === curr.handle, self => self.valid && self.exists);
