@@ -23,11 +23,7 @@ let   callbackId = 0;
 
 alt.onServer('altv-api:response', (id, ...args) => {
 
-  if(callbacks[id] === undefined) {
-
-    alt.logError('')
-
-  } else {
+  if(callbacks[id] !== undefined) {
 
     callbacks[id](...args);
     delete callbacks[id];
