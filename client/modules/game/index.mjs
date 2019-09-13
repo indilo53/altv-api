@@ -58,18 +58,7 @@ class Game extends EventEmitter {
   processControls() {
 
 
-    if(this.mouseInputEnabled) {
-
-      natives.enableControlAction(0, 1,   true);
-      natives.enableControlAction(0, 2,   true);
-      natives.enableControlAction(0, 14,  true);
-      natives.enableControlAction(0, 15,  true);
-      natives.enableControlAction(0, 24,  true);
-      natives.enableControlAction(0, 25,  true);
-      natives.enableControlAction(0, 37,  true);
-      natives.enableControlAction(0, 142, true);
-
-    } else {
+    if(!this.mouseInputEnabled) {
 
       natives.disableControlAction(0, 1,   true);
       natives.disableControlAction(0, 2,   true);
