@@ -39,9 +39,15 @@ class Game extends EventEmitter {
     alt.on('connectionComplete', async () => {
       
       await utils.waitFor(() => alt.Player.local !== null && alt.Player.local.scriptID !== null && alt.Player.local.scriptID > 0);
-
       this._camera = new GameplayCamera();
+      this.emit('ready');
 
+    });
+
+    alt.on('resourceStart', async () => {
+      
+      await utils.waitFor(() => alt.Player.local !== null && alt.Player.local.scriptID !== null && alt.Player.local.scriptID > 0);
+      this._camera = new GameplayCamera();
       this.emit('ready');
 
     });
