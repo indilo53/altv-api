@@ -28,7 +28,6 @@ class Game extends EventEmitter {
     
     super();
 
-    this.ready             = false;
     this.mouseInputEnabled = true;
 
     this.processEvents();
@@ -37,30 +36,10 @@ class Game extends EventEmitter {
 
   processEvents() {
 
-    alt.on('connectionComplete', async () => {
-      
-      if(this.ready)
-        return;
-
-      await utils.waitFor(() => alt.Player.local !== null && alt.Player.local.scriptID !== null && alt.Player.local.scriptID > 0);
-      
-      this._camera = new GameplayCamera();
-      this.ready   = true;
-
-      this.emit('ready');
-
-    });
-
     alt.on('resourceStart', async () => {
       
-      if(this.ready)
-        return;
-
       await utils.waitFor(() => alt.Player.local !== null && alt.Player.local.scriptID !== null && alt.Player.local.scriptID > 0);
-      
       this._camera = new GameplayCamera();
-      this.ready   = true;
-
       this.emit('ready');
 
     });
